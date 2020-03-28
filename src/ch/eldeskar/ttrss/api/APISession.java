@@ -23,6 +23,36 @@ import org.json.JSONObject;
 public class APISession {
 
 	/**
+	 * This method returns an abstracted integer API version level, increased with
+	 * each API functionality change. This is the proper way to detect host API
+	 * functionality, instead of using getVersion.
+	 * 
+	 * @param URL    url of the tt rss server
+	 * @param String session_id
+	 * @return JSONObject Response of the server. Example: {"level":1}
+	 * @throws IOException
+	 */
+	public JSONObject getApiLevel(URL url, String session_id) throws IOException {
+		JSONObject getApiLevel = new JSONObject("{\"sid\":\"" + session_id + "\",\"op\":\"getApiLevel\"}");
+		return sendRequest(url, getApiLevel);
+	}
+
+	/**
+	 * This method returns tt-rss version. As of, version:1.5.8 it is not
+	 * recommended to use this to detect API functionality, please use getApiLevel
+	 * instead.
+	 * 
+	 * @param URL    url of the tt rss server
+	 * @param String session_id
+	 * @return JSONObject Response of the server. Example: {"version":"1.4.0"}
+	 * @throws IOException
+	 */
+	public JSONObject getVersion(URL url, String session_id) throws IOException {
+		JSONObject getApiLevel = new JSONObject("{\"sid\":\"" + session_id + "\",\"op\":\"getApiLevel\"}");
+		return sendRequest(url, getApiLevel);
+	}
+
+	/**
 	 * This method logs into the tt rss server and returns the client session.
 	 * 
 	 * Returns client session ID.
@@ -39,9 +69,9 @@ public class APISession {
 	 * login.
 	 * 
 	 * @param URL    url of the tt rss server
-	 * @param Strin  user login name
+	 * @param String user login name
 	 * @param String password
-	 * @return JSONObject Response of the server
+	 * @return JSONObject Response of the server. {"session_id":"xxx"}
 	 * @throws IOException
 	 */
 	public JSONObject login(URL url, String user, String password) throws IOException {
@@ -49,14 +79,46 @@ public class APISession {
 		return sendRequest(url, login);
 	}
 
+	/**
+	 * This method closes your login session. Returns either status-message
+	 * {"status":"OK"} or an error (e.g. {"error":"NOT_LOGGED_IN"}
+	 * 
+	 * @param URL    url of the tt rss server
+	 * @param String session_id
+	 * @return JSONObject Response of the server. Example: {"status":"OK"} or
+	 *         {"error":"NOT_LOGGED_IN"}
+	 * @throws IOException
+	 */
 	public JSONObject logout(URL url, String session_id) throws IOException {
-		JSONObject logout = new JSONObject("{\"sid\":\"" + session_id + "\",\"op\":\"getApiLevel\"}");
+		JSONObject logout = new JSONObject("{\"sid\":\"" + session_id + "\",\"op\":\"logout\"}");
 		return sendRequest(url, logout);
 	}
 
-	public JSONObject getApiLevel(URL url, String session_id) throws IOException {
-		JSONObject getAPILvl = new JSONObject("{\"sid\":\"" + session_id + "\",\"op\":\"getApiLevel\"}");
-		return sendRequest(url, getAPILvl);
+	/**
+	 * This method returns a status message with boolean value showing whether your
+	 * client (e.g. specific session ID) is currently logged in.
+	 * 
+	 * @param URL    url of the tt rss server
+	 * @param String session_id
+	 * @return JSONObject Response of the server. Example: {"status":false}
+	 * @throws IOException
+	 */
+	public JSONObject isLoggedIn(URL url, String session_id) throws IOException {
+		JSONObject isLoggedIn = new JSONObject("{\"sid\":\"" + session_id + "\",\"op\":\"isLoggedIn\"}");
+		return sendRequest(url, isLoggedIn);
+	}
+
+	/**
+	 * This method returns an integer value of currently unread articles.
+	 * 
+	 * @param URL    url of the tt rss server
+	 * @param String session_id
+	 * @return JSONObject Response of the server. Example: {"unread":"992"}
+	 * @throws IOException
+	 */
+	public JSONObject getUnread(URL url, String session_id) throws IOException {
+		JSONObject getUnread = new JSONObject("{\"sid\":\"" + session_id + "\",\"op\":\"getUnread\"}");
+		return sendRequest(url, getUnread);
 	}
 
 	private JSONObject sendRequest(URL url, JSONObject request) throws IOException {
