@@ -9,11 +9,49 @@ import java.net.URL;
 
 import org.json.JSONObject;
 
+/**
+ * This class handles all the API calls to a TT-RSS server. this version was
+ * written for version 1.5.8 of the TT-RSS server More information about the
+ * server and the API can be found here:
+ * 
+ * @see <a href="https://tt-rss.org">https://tt-rss.org<a\>
+ * 
+ * @author Eldeskar
+ * @version 0.0.1
+ *
+ */
 public class APISession {
 
-	public JSONObject logIn(URL url, String user, String password) throws IOException {
+	/**
+	 * This method logs into the tt rss server and returns the client session.
+	 * 
+	 * Returns client session ID.
+	 * 
+	 * {"session_id":"xxx"} It can also return several error objects:
+	 * 
+	 * If API is disabled for this user: error: "API_DISABLED" If specified username
+	 * and password are incorrect: error: "LOGIN_ERROR" In case it isn’t immediately
+	 * obvious, you have to login and get a session ID even if you are using single
+	 * user mode. You can omit user and password parameters.
+	 * 
+	 * On version:1.6.0 and above login also returns current API level as an
+	 * api_level integer, you can use that instead of calling getApiLevel after
+	 * login.
+	 * 
+	 * @param URL    url of the tt rss server
+	 * @param Strin  user login name
+	 * @param String password
+	 * @return JSONObject Response of the server
+	 * @throws IOException
+	 */
+	public JSONObject login(URL url, String user, String password) throws IOException {
 		JSONObject login = new JSONObject("{\"op\":\"login\",\"user\":\"" + user + "\",\"password\":\"" + password + "\"}");
 		return sendRequest(url, login);
+	}
+
+	public JSONObject logout(URL url, String session_id) throws IOException {
+		JSONObject logout = new JSONObject("{\"sid\":\"" + session_id + "\",\"op\":\"getApiLevel\"}");
+		return sendRequest(url, logout);
 	}
 
 	public JSONObject getApiLevel(URL url, String session_id) throws IOException {
