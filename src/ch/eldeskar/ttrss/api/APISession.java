@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 import org.json.JSONObject;
 
@@ -139,14 +140,13 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject getCounters(URL url, String session_id) throws IOException {
-		// TODO getCounters
-		return null;
+	public JSONObject getCounters(URL url, String session_id, List<String> parameters) throws IOException {
+		return createJSONParamString(session_id, parameters, "getCounters");
 	}
 
 	/**
 	 * 
-	 * This method rreturns JSON-encoded list of feeds. The list includes category
+	 * This method returns JSON-encoded list of feeds. The list includes category
 	 * id, title, feed url, etc.
 	 * 
 	 * Parameters:
@@ -175,9 +175,8 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject getFeeds(URL url, String session_id) throws IOException {
-		// TODO getFeeds
-		return null;
+	public JSONObject getFeeds(URL url, String session_id, List<String> parameters) throws IOException {
+		return createJSONParamString(session_id, parameters, "getFeeds");
 	}
 
 	/**
@@ -199,9 +198,8 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject getCategories(URL url, String session_id) throws IOException {
-		// TODO getCategories
-		return null;
+	public JSONObject getCategories(URL url, String session_id, List<String> parameters) throws IOException {
+		return createJSONParamString(session_id, parameters, "getCategories");
 	}
 
 	/**
@@ -247,9 +245,8 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject getHeadlines(URL url, String session_id) throws IOException {
-		// TODO getHeadlines
-		return null;
+	public JSONObject getHeadlines(URL url, String session_id, List<String> parameters) throws IOException {
+		return createJSONParamString(session_id, parameters, "getHeadlines");
 	}
 
 	/**
@@ -276,9 +273,8 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject updateArticle(URL url, String session_id) throws IOException {
-		// TODO updateArticle
-		return null;
+	public JSONObject updateArticle(URL url, String session_id, List<String> parameters) throws IOException {
+		return createJSONParamString(session_id, parameters, "updateArticle");
 	}
 
 	/**
@@ -293,9 +289,10 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject getArticle(URL url, String session_id) throws IOException {
-		// TODO getArticle
-		return null;
+	public JSONObject getArticle(URL url, String session_id, String article_Id) throws IOException {
+		JSONObject getArticle = new JSONObject(
+				"{\"sid\":\"" + session_id + "\",\"op\":\"getArticle\"\"article_id\":\"" + article_Id + "\"}");
+		return sendRequest(url, getArticle);
 	}
 
 	/**
@@ -312,9 +309,8 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject getConfig(URL url, String session_id) throws IOException {
-		// TODO getConfig
-		return null;
+	public JSONObject getConfig(URL url, String session_id, List<String> parameters) throws IOException {
+		return createJSONParamString(session_id, parameters, "getConfig");
 	}
 
 	/**
@@ -332,9 +328,10 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject updateFeed(URL url, String session_id) throws IOException {
-		// TODO updateFeed
-		return null;
+	public JSONObject updateFeed(URL url, String session_id, String feed_Id) throws IOException {
+		JSONObject updateFeed = new JSONObject(
+				"{\"sid\":\"" + session_id + "\",\"op\":\"updateFeed\"\"feed_id\":\"" + feed_Id + "\"}");
+		return sendRequest(url, updateFeed);
 	}
 
 	/**
@@ -347,9 +344,10 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject getPref(URL url, String session_id) throws IOException {
-		// TODO getFeeds
-		return null;
+	public JSONObject getPref(URL url, String session_id, String pref_name) throws IOException {
+		JSONObject getPref = new JSONObject(
+				"{\"sid\":\"" + session_id + "\",\"op\":\"getPref\"\"pref_name\":\"" + pref_name + "\"}");
+		return sendRequest(url, getPref);
 	}
 
 	/**
@@ -372,17 +370,6 @@ public class APISession {
 	 */
 	public JSONObject catchupFeed(URL url, String session_id) throws IOException {
 		// TODO catchupFeed
-		return null;
-	}
-
-	/**
-	 * @param URL    url
-	 * @param String session_id
-	 * @return JSONObject Response of the server. Example:
-	 * @throws IOException
-	 */
-	public JSONObject getCounters2(URL url, String session_id) throws IOException {
-		// TODO getCounters
 		return null;
 	}
 
@@ -412,8 +399,8 @@ public class APISession {
 	 * @throws IOException
 	 */
 	public JSONObject getLabels(URL url, String session_id) throws IOException {
-		// TODO getLabels (since API level 1)
-		return null;
+		JSONObject getLabels = new JSONObject("{\"sid\":\"" + session_id + "\",\"op\":\"getLabels\"}");
+		return sendRequest(url, getLabels);
 	}
 
 	/**
@@ -500,6 +487,16 @@ public class APISession {
 	public JSONObject getFeedTree(URL url, String session_id) throws IOException {
 		// TODO getFeedTree
 		return null;
+	}
+
+	private JSONObject createJSONParamString(String session_id, List<String> parameters, String apiMethodName) {
+		String outputModes = "";
+		for (String param : parameters) {
+			outputModes = outputModes + "," + param + ":" + '1';
+		}
+		JSONObject getJSONObject = new JSONObject(
+				"{\"sid\":\"" + session_id + "\",\"op\":\"" + apiMethodName + "\"" + outputModes + "}");
+		return getJSONObject;
 	}
 
 	private JSONObject sendRequest(URL url, JSONObject request) throws IOException {
