@@ -398,8 +398,9 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject getLabels(URL url, String session_id) throws IOException {
-		JSONObject getLabels = new JSONObject("{\"sid\":\"" + session_id + "\",\"op\":\"getLabels\"}");
+	public JSONObject getLabels(URL url, String session_id, String article_Id) throws IOException {
+		JSONObject getLabels = new JSONObject(
+				"{\"sid\":\"" + session_id + "\",\"op\":\"getLabels\",\"article_Id\":\"" + article_Id + "\"}");
 		return sendRequest(url, getLabels);
 	}
 
@@ -421,9 +422,8 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject setArticleLabel(URL url, String session_id) throws IOException {
-		// TODO getFeeds
-		return null;
+	public JSONObject setArticleLabel(URL url, String session_id, List<String> parameters) throws IOException {
+		return createJSONParamString(session_id, parameters, "setArticleLabel");
 	}
 
 	/**
@@ -439,9 +439,8 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject shareToPublished(URL url, String session_id) throws IOException {
-		// TODO shareToPublished
-		return null;
+	public JSONObject shareToPublished(URL url, String session_id, List<String> parameters) throws IOException {
+		return createJSONParamString(session_id, parameters, "shareToPublished");
 	}
 
 	/**
@@ -450,9 +449,21 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject subscribeToFeed(URL url, String session_id) throws IOException {
-		// TODO subscribeToFeed
-		return null;
+	public JSONObject subscribeToFeed(URL url, String session_id, String feed_url, String category_id)
+			throws IOException {
+		JSONObject subscribeToFeed = new JSONObject(
+				"{\"sid\":\"" + session_id + "\",\"op\":\"subscribeToFeed\",\"session_id\":\"" + session_id
+						+ "\",\"feed_url\":\"" + feed_url + "\"\",\"category_id\":\"" + category_id + "\"\"}");
+		return sendRequest(url, subscribeToFeed);
+	}
+
+	public JSONObject subscribeToFeed(URL url, String session_id, String feed_url, String category_id, String login,
+			String password) throws IOException {
+		JSONObject subscribeToFeed = new JSONObject(
+				"{\"sid\":\"" + session_id + "\",\"op\":\"subscribeToFeed\",\"session_id\":\"" + session_id
+						+ "\",\"feed_url\":\"" + feed_url + "\"\",\"category_id\":\"" + category_id + "\"\",\"login\":\"" + login
+						+ "\"\",\"password\":\"" + password + "\"\"}");
+		return sendRequest(url, subscribeToFeed);
 	}
 
 	/**
@@ -467,9 +478,10 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject unsubscribeFeed(URL url, String session_id) throws IOException {
-		// TODO unsubscribeFeed
-		return null;
+	public JSONObject unsubscribeFeed(URL url, String session_id, String feed_id) throws IOException {
+		JSONObject unsubscribeFeed = new JSONObject(
+				"{\"sid\":\"" + session_id + "\",\"op\":\"unsubscribeFeed\",\"feed_id\":\"" + feed_id + "\"}");
+		return sendRequest(url, unsubscribeFeed);
 	}
 
 	/**
@@ -484,9 +496,10 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject getFeedTree(URL url, String session_id) throws IOException {
-		// TODO getFeedTree
-		return null;
+	public JSONObject getFeedTree(URL url, String session_id, boolean includeEmpty) throws IOException {
+		JSONObject getFeedTree = new JSONObject(
+				"{\"sid\":\"" + session_id + "\",\"op\":\"getFeedTree\",\"include_empty\":\"" + includeEmpty + "\"}");
+		return sendRequest(url, getFeedTree);
 	}
 
 	private JSONObject createJSONParamString(String session_id, List<String> parameters, String apiMethodName) {
