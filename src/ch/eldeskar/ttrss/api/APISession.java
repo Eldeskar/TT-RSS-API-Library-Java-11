@@ -76,7 +76,8 @@ public class APISession {
 	 * @throws IOException
 	 */
 	public JSONObject login(URL url, String user, String password) throws IOException {
-		JSONObject login = new JSONObject("{\"op\":\"login\",\"user\":\"" + user + "\",\"password\":\"" + password + "\"}");
+		JSONObject login = new JSONObject(
+				"{\"op\":\"login\",\"user\":\"" + user + "\",\"password\":\"" + password + "\"}");
 		return sendRequest(url, login);
 	}
 
@@ -461,8 +462,8 @@ public class APISession {
 			String password) throws IOException {
 		JSONObject subscribeToFeed = new JSONObject(
 				"{\"sid\":\"" + session_id + "\",\"op\":\"subscribeToFeed\",\"session_id\":\"" + session_id
-						+ "\",\"feed_url\":\"" + feed_url + "\"\",\"category_id\":\"" + category_id + "\"\",\"login\":\"" + login
-						+ "\"\",\"password\":\"" + password + "\"\"}");
+						+ "\",\"feed_url\":\"" + feed_url + "\"\",\"category_id\":\"" + category_id
+						+ "\"\",\"login\":\"" + login + "\"\",\"password\":\"" + password + "\"\"}");
 		return sendRequest(url, subscribeToFeed);
 	}
 
@@ -505,7 +506,7 @@ public class APISession {
 	private JSONObject createJSONParamString(String session_id, List<String> parameters, String apiMethodName) {
 		String outputModes = "";
 		for (String param : parameters) {
-			outputModes = outputModes + "," + param + ":" + '1';
+			outputModes = outputModes + "," + param;
 		}
 		JSONObject getJSONObject = new JSONObject(
 				"{\"sid\":\"" + session_id + "\",\"op\":\"" + apiMethodName + "\"" + outputModes + "}");
