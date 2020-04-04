@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 
 import org.json.JSONObject;
 
@@ -76,9 +75,9 @@ public class APISession {
 	 * @throws IOException
 	 */
 	public JSONObject login(URL url, String user, String password) throws IOException {
-		JSONObject login = new JSONObject(
+		JSONObject request = new JSONObject(
 				"{\"op\":\"login\",\"user\":\"" + user + "\",\"password\":\"" + password + "\"}");
-		return sendRequest(url, login);
+		return sendRequest(url, request);
 	}
 
 	/**
@@ -92,8 +91,8 @@ public class APISession {
 	 * @throws IOException
 	 */
 	public JSONObject logout(URL url, String session_id) throws IOException {
-		JSONObject logout = new JSONObject("{\"sid\":\"" + session_id + "\",\"op\":\"logout\"}");
-		return sendRequest(url, logout);
+		JSONObject request = new JSONObject("{\"sid\":\"" + session_id + "\",\"op\":\"logout\"}");
+		return sendRequest(url, request);
 	}
 
 	/**
@@ -106,8 +105,8 @@ public class APISession {
 	 * @throws IOException
 	 */
 	public JSONObject isLoggedIn(URL url, String session_id) throws IOException {
-		JSONObject isLoggedIn = new JSONObject("{\"sid\":\"" + session_id + "\",\"op\":\"isLoggedIn\"}");
-		return sendRequest(url, isLoggedIn);
+		JSONObject request = new JSONObject("{\"sid\":\"" + session_id + "\",\"op\":\"isLoggedIn\"}");
+		return sendRequest(url, request);
 	}
 
 	/**
@@ -119,8 +118,8 @@ public class APISession {
 	 * @throws IOException
 	 */
 	public JSONObject getUnread(URL url, String session_id) throws IOException {
-		JSONObject getUnread = new JSONObject("{\"sid\":\"" + session_id + "\",\"op\":\"getUnread\"}");
-		return sendRequest(url, getUnread);
+		JSONObject request = new JSONObject("{\"sid\":\"" + session_id + "\",\"op\":\"getUnread\"}");
+		return sendRequest(url, request);
 	}
 
 	/**
@@ -141,8 +140,9 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject getCounters(URL url, String session_id, List<String> parameters) throws IOException {
-		return createJSONParamString(session_id, parameters, "getCounters");
+	public JSONObject getCounters(URL url, String session_id, String parameters) throws IOException {
+		JSONObject request = createJSONParamString(session_id, "getCounters", parameters);
+		return sendRequest(url, request);
 	}
 
 	/**
@@ -176,8 +176,9 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject getFeeds(URL url, String session_id, List<String> parameters) throws IOException {
-		return createJSONParamString(session_id, parameters, "getFeeds");
+	public JSONObject getFeeds(URL url, String session_id, String parameters) throws IOException {
+		JSONObject request = createJSONParamString(session_id, "getFeeds", parameters);
+		return sendRequest(url, request);
 	}
 
 	/**
@@ -199,8 +200,9 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject getCategories(URL url, String session_id, List<String> parameters) throws IOException {
-		return createJSONParamString(session_id, parameters, "getCategories");
+	public JSONObject getCategories(URL url, String session_id, String parameters) throws IOException {
+		JSONObject request = createJSONParamString(session_id, "getCategories", parameters);
+		return sendRequest(url, request);
 	}
 
 	/**
@@ -246,8 +248,9 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject getHeadlines(URL url, String session_id, List<String> parameters) throws IOException {
-		return createJSONParamString(session_id, parameters, "getHeadlines");
+	public JSONObject getHeadlines(URL url, String session_id, String parameters) throws IOException {
+		JSONObject request = createJSONParamString(session_id, "getHeadlines", parameters);
+		return sendRequest(url, request);
 	}
 
 	/**
@@ -274,8 +277,9 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject updateArticle(URL url, String session_id, List<String> parameters) throws IOException {
-		return createJSONParamString(session_id, parameters, "updateArticle");
+	public JSONObject updateArticle(URL url, String session_id, String parameters) throws IOException {
+		JSONObject request = createJSONParamString(session_id, "updateArticle", parameters);
+		return sendRequest(url, request);
 	}
 
 	/**
@@ -291,9 +295,9 @@ public class APISession {
 	 * @throws IOException
 	 */
 	public JSONObject getArticle(URL url, String session_id, String article_Id) throws IOException {
-		JSONObject getArticle = new JSONObject(
-				"{\"sid\":\"" + session_id + "\",\"op\":\"getArticle\"\"article_id\":\"" + article_Id + "\"}");
-		return sendRequest(url, getArticle);
+		JSONObject request = new JSONObject(
+				"{\"sid\":\"" + session_id + "\",\"op\":\"getArticle\",\"article_id\":\"" + article_Id + "\"}");
+		return sendRequest(url, request);
 	}
 
 	/**
@@ -310,8 +314,9 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject getConfig(URL url, String session_id, List<String> parameters) throws IOException {
-		return createJSONParamString(session_id, parameters, "getConfig");
+	public JSONObject getConfig(URL url, String session_id, String parameters) throws IOException {
+		JSONObject request = createJSONParamString(session_id, "getConfig", parameters);
+		return sendRequest(url, request);
 	}
 
 	/**
@@ -346,9 +351,9 @@ public class APISession {
 	 * @throws IOException
 	 */
 	public JSONObject getPref(URL url, String session_id, String pref_name) throws IOException {
-		JSONObject getPref = new JSONObject(
+		JSONObject request = new JSONObject(
 				"{\"sid\":\"" + session_id + "\",\"op\":\"getPref\"\"pref_name\":\"" + pref_name + "\"}");
-		return sendRequest(url, getPref);
+		return sendRequest(url, request);
 	}
 
 	/**
@@ -400,9 +405,9 @@ public class APISession {
 	 * @throws IOException
 	 */
 	public JSONObject getLabels(URL url, String session_id, String article_Id) throws IOException {
-		JSONObject getLabels = new JSONObject(
+		JSONObject request = new JSONObject(
 				"{\"sid\":\"" + session_id + "\",\"op\":\"getLabels\",\"article_Id\":\"" + article_Id + "\"}");
-		return sendRequest(url, getLabels);
+		return sendRequest(url, request);
 	}
 
 	/**
@@ -423,8 +428,9 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject setArticleLabel(URL url, String session_id, List<String> parameters) throws IOException {
-		return createJSONParamString(session_id, parameters, "setArticleLabel");
+	public JSONObject setArticleLabel(URL url, String session_id, String parameters) throws IOException {
+		JSONObject request = createJSONParamString(session_id, "setArticleLabel", parameters);
+		return sendRequest(url, request);
 	}
 
 	/**
@@ -440,8 +446,9 @@ public class APISession {
 	 * @return JSONObject Response of the server. Example:
 	 * @throws IOException
 	 */
-	public JSONObject shareToPublished(URL url, String session_id, List<String> parameters) throws IOException {
-		return createJSONParamString(session_id, parameters, "shareToPublished");
+	public JSONObject shareToPublished(URL url, String session_id, String parameters) throws IOException {
+		JSONObject request = createJSONParamString(session_id, "shareToPublished", parameters);
+		return sendRequest(url, request);
 	}
 
 	/**
@@ -462,8 +469,8 @@ public class APISession {
 			String password) throws IOException {
 		JSONObject subscribeToFeed = new JSONObject(
 				"{\"sid\":\"" + session_id + "\",\"op\":\"subscribeToFeed\",\"session_id\":\"" + session_id
-						+ "\",\"feed_url\":\"" + feed_url + "\"\",\"category_id\":\"" + category_id
-						+ "\"\",\"login\":\"" + login + "\"\",\"password\":\"" + password + "\"\"}");
+						+ "\",\"feed_url\":\"" + feed_url + "\"\",\"category_id\":\"" + category_id + "\"\",\"login\":\"" + login
+						+ "\"\",\"password\":\"" + password + "\"\"}");
 		return sendRequest(url, subscribeToFeed);
 	}
 
@@ -503,14 +510,10 @@ public class APISession {
 		return sendRequest(url, getFeedTree);
 	}
 
-	private JSONObject createJSONParamString(String session_id, List<String> parameters, String apiMethodName) {
-		String outputModes = "";
-		for (String param : parameters) {
-			outputModes = outputModes + "," + param;
-		}
-		JSONObject getJSONObject = new JSONObject(
-				"{\"sid\":\"" + session_id + "\",\"op\":\"" + apiMethodName + "\"" + outputModes + "}");
-		return getJSONObject;
+	private JSONObject createJSONParamString(String session_id, String apiMethodName, String parameters) {
+		JSONObject jsonObject = new JSONObject(
+				"{\"sid\":\"" + session_id + "\",\"op\":\"" + apiMethodName + "\"" + parameters + "}");
+		return jsonObject;
 	}
 
 	private JSONObject sendRequest(URL url, JSONObject request) throws IOException {
